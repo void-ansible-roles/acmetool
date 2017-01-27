@@ -1,0 +1,80 @@
+---
+- name: Install acmetool
+  xbps:
+    pkg: acmetool
+    state: present
+
+- name: Create acmetool data root
+  file:
+    path: /var/acme
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create acmetool directories
+  file:
+    path: /var/lib/acme/{{ item.dir }}
+    state: directory
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  with_items:
+    - { dir: accounts, mode: '0700' }
+    - { dir: certs, mode: '0755' }
+    - { dir: conf, mode: '0755' }
+    - { dir: desired, mode: '0755' }
+    - { dir: keys, mode: '0700' }
+    - { dir: live, mode: '0755' }
+    - { dir: tmp, mode: '0700' }
+  loop_control:
+    label: "{{ item.dir }}"
+
+- name: Install acmetool responses file
+  template:
+    src: responses.j2
+    dest: /var/lib/acme/conf/responses
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Check for quickstart flag
+  stat:
+    path: /var/lib/acme/quickstart.done
+  register: quickstart
+
+- name: Run quickstart
+  command: acmetool quickstart --response-file /var/lib/acme/conf/responses
+  when: not quickstart.stat.exists
+  notify:
+    - acmetool-quickstart
+    
+- name: Install acmetool configuration
+  copy:
+    src: target
+    dest: /var/lib/acme/conf/target
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Configure wanted certificates
+  template:
+    src: want.j2
+    dest: /var/lib/acme/desired/{{ item.site }}
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - "{{ acmetool.sites }}"
+  loop_control:
+    label: "{{ item.site }}"
+  notify:
+    - acmetool
+
+- name: Install renewal crontab
+  copy:
+    src: acmetool.crontab
+    dest: /etc/cron.d/acmetool
+    owner: root
+    group: root
+    mode: 0644

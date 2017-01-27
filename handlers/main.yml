@@ -1,0 +1,11 @@
+---
+- name: acmetool-quickstart
+  file:
+    path: /var/lib/acme/quickstart.done
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+
+- name: acmetool
+  command: acmetool --response-file /var/lib/acme/conf/responses --batch reconcile

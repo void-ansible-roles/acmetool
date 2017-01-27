@@ -1,0 +1,13 @@
+satisfy:
+  names:
+{% for name in item.names %}
+    - {{ name }}
+{% endfor %}    
+
+request:
+  ocsp-must-staple: true
+  challenge:
+  key:                  
+    type: rsa|ecdsa
+    rsa-size: 2048
+    ecdsa-curve: nistp256
