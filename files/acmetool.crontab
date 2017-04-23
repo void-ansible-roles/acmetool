@@ -1,1 +1,1 @@
-0 0 * * * /usr/bin/acmetool --response-file /var/lib/acme/conf/responses --batch
+0 0 * * * root /usr/bin/acmetool --response-file /var/lib/acme/conf/responses --batch
