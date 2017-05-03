@@ -6,7 +6,7 @@
 
 - name: Create acmetool data root
   file:
-    path: /var/acme
+    path: /var/lib/acme
     state: directory
     owner: root
     group: root
