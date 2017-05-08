@@ -1,0 +1,4 @@
+*filter
+-A OUTPUT -p tcp -d acme-v01.api.letsencrypt.org --dport 443 -j ACCEPT
+-A OUTPUT -p tcp -d ocsp.int-x3.letsencrypt.org --dport 80 -j ACCEPT
+COMMIT
