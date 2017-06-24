@@ -78,3 +78,13 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Install acmetool firewall rules
+  copy:
+    src: acmetool.rules
+    dest: /etc/iptables.d/acmetool.rules
+    owner: root
+    group: root
+    mode: 0640
+  notify:
+    - iptables
