@@ -48,7 +48,7 @@
   when: not quickstart.stat.exists
   notify:
     - acmetool-quickstart
-    
+
 - name: Install acmetool configuration
   copy:
     src: target
@@ -70,6 +70,14 @@
     label: "{{ item.site }}"
   notify:
     - acmetool
+
+- name: Ensure cron.d exists
+  file:
+    path: /etc/cron.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 - name: Install renewal crontab
   copy:
