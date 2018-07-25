@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+EVENT_NAME="$1"
+[ "$EVENT_NAME" = "live-updated" ] || exit 42
+
+{% for service in acmetool.services %}
+sv restart {{ service }}
+{% endfor %}

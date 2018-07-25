@@ -25,7 +25,7 @@ Variables Required:
     * names: names that are valid URLs for this site
 
 Optional Variables:
-  * None
+  * acmetool.services: list of services to reload on certificate change
 
 Files Required:
   * None

@@ -96,3 +96,12 @@
     mode: 0640
   notify:
     - iptables
+
+- name: Install Service Hooks
+  template:
+    src: sv_restart.j2
+    dest: /usr/libexec/acme/hooks/sv_restart
+    owner: root
+    group: root
+    mode: 0755
+  when: acmetool.services is defined
